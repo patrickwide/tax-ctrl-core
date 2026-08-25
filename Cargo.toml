@@ -2,8 +2,28 @@
 name = "tax_ctrl_core"
 version = "0.1.0"
 edition = "2024"
+# `edition = "2024"` requires this as a hard minimum; see rust-toolchain.toml
+# for the toolchain contributors and CI actually build with.
+rust-version = "1.85"
+description = "Core Rust engine for tax_ctrl: runtime-swappable persistence (SQLite/PostgreSQL) via SeaORM, embedded in the app via Flutter Rust Bridge."
 
 [dependencies]
 dotenvy = "0.15.7"
-sea-orm = { version = "2.0.2", features = ["sqlx-sqlite", "runtime-tokio-rustls", "macros"] }
+# Both sqlx-sqlite and sqlx-postgres are enabled so the backend is chosen
+# at runtime from the DATABASE_URL scheme (sqlite:// vs postgres://),
+# rather than hardcoded at compile time. See src/persistence/connection.rs.
+sea-orm = { version = "2.0.2", features = [
+    "sqlx-sqlite",
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+    "macros",
+] }
+# Provides the Migrator/MigrationTrait scaffolding used in
+# src/persistence/schema.rs. The "cli" default feature is disabled since
+# this crate embeds migrations rather than shelling out to sea-orm-cli.
+sea-orm-migration = { version = "2.0.2", default-features = false, features = [
+    "sqlx-sqlite",
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+] }
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros"] }
