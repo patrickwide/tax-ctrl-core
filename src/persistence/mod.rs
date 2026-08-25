@@ -17,6 +17,7 @@ pub mod branch_insurance_repository;
 pub mod connection;
 pub mod entities;
 pub mod etims_types;
+mod migrations;
 pub mod repository;
 pub mod schema;
 

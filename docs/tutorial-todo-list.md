@@ -87,12 +87,27 @@ sea-orm-cli migrate generate create_todos_table
 
 ## 2. Register the migration
 
-In `src/persistence/schema.rs`:
+Migrations are declared as a sibling module of `schema.rs`, not nested
+inside it — `mod migrations { pub mod ...; }` written *inside*
+`schema.rs` would tell rustc to look for
+`src/persistence/schema/migrations/...`, not
+`src/persistence/migrations/...` where the file actually lives. Add a
+`src/persistence/migrations/mod.rs` (create it the first time) that
+declares the migration:
 
 ```rust
-mod migrations {
-    pub mod m20240115_000001_create_todos_table;
-}
+// src/persistence/migrations/mod.rs
+pub mod m20240115_000001_create_todos_table;
+```
+
+Then declare `mod migrations;` alongside `schema` in
+`src/persistence/mod.rs`, and register the migration in
+`src/persistence/schema.rs`:
+
+```rust
+use sea_orm_migration::prelude::*;
+
+use super::migrations;
 
 pub struct Migrator;
 

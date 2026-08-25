@@ -16,11 +16,9 @@
 //! since `Migrator` operates over the same runtime-resolved connection
 //! used everywhere else — see [`super::connection`].
 
-mod migrations {
-    pub mod m20260826_000001_create_branch_insurance_table;
-}
-
 use sea_orm_migration::prelude::*;
+
+use super::migrations;
 
 pub struct Migrator;
 
@@ -29,7 +27,7 @@ impl MigratorTrait for Migrator {
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
             // Register new migrations here, in chronological order, e.g.:
-            // Box::new(m20240101_000001_create_example_table::Migration),
+            // Box::new(migrations::m20240101_000001_create_example_table::Migration),
             Box::new(migrations::m20260826_000001_create_branch_insurance_table::Migration),
         ]
     }
