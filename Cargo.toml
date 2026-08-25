@@ -4,3 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+dotenvy = "0.15.7"
+sea-orm = { version = "2.0.2", features = ["sqlx-sqlite", "runtime-tokio-rustls", "macros"] }
+tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros"] }
