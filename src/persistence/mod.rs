@@ -9,5 +9,5 @@ pub mod entities;
 pub mod repository;
 pub mod schema;
 
-pub use connection::{connect, connect_from_env, DbConfig};
+pub use connection::{DbConfig, connect, connect_from_env};
 pub use schema::Migrator;

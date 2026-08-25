@@ -93,6 +93,16 @@ Every push and pull request runs, via GitHub Actions
 
 A pull request is expected to pass all four before merging.
 
+## Documentation
+
+- [`docs/USAGE.md`](docs/USAGE.md) — how the connection, migration,
+  entity, and repository layers fit together, and what `sea-orm-cli` is
+  (and isn't) for.
+- [`docs/tutorial-todo-list.md`](docs/tutorial-todo-list.md) — a full
+  worked example (migration → entity → repository → tests) using a
+  to-do list as a stand-in feature, for when a real feature needs the
+  same treatment.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development workflow:
