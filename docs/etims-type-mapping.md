@@ -85,31 +85,23 @@ above.
 
 ## Worked example
 
-Following the pattern in [`tutorial-todo-list.md`](tutorial-todo-list.md),
-a migration persisting just the scalar fields of
-`BranchInsuranceInformation` (`isrccCd: String`, `isrccNm: String`,
-`isrcRt: i64`, `useYn: String`, plus the four audit `String` fields)
-would look like:
+`BranchInsuranceInformation` is no longer just a hypothetical — it's the
+first real table built on this mapping, following the pattern in
+[`tutorial-todo-list.md`](tutorial-todo-list.md):
 
-```rust
-use sea_orm_migration::prelude::*;
+- Migration: [`m20260826_000001_create_branch_insurance_table`](../src/persistence/migrations/m20260826_000001_create_branch_insurance_table.rs)
+- Entity: [`entities::branch_insurance`](../src/persistence/entities/branch_insurance.rs)
+- Repository: [`BranchInsuranceRepository`](../src/persistence/branch_insurance_repository.rs)
 
-manager
-    .create_table(
-        Table::create()
-            .table(BranchInsurance::Table)
-            .if_not_exists()
-            .col(ColumnDef::new(BranchInsurance::Id).integer().not_null().auto_increment().primary_key())
-            .col(ColumnDef::new(BranchInsurance::IsrccCd).string_len(10).not_null())
-            .col(ColumnDef::new(BranchInsurance::IsrccNm).string_len(100).not_null())
-            .col(ColumnDef::new(BranchInsurance::IsrcRt).big_integer().not_null())
-            .col(ColumnDef::new(BranchInsurance::UseYn).string_len(1).not_null())
-            .to_owned(),
-    )
-    .await
-```
+The migration's `string_len(10)`, `string_len(100)`, `string_len(1)`,
+`string_len(60)`, `string_len(20)` bounds come directly from the
+`validate_field(&mut errors, "isrccCd", ..., 10)`-style calls in
+`BranchInsuranceInformation::validate` — that's the per-field-max-length
+source of truth mentioned in the table above. `isrcRt` is `big_integer`,
+matching `i64`'s `EtimsColumnType` mapping.
 
-The `string_len(10)`, `string_len(100)`, `string_len(1)` bounds above
-come directly from the `validate_field(&mut errors, "isrccCd", ..., 10)`
-calls in `BranchInsuranceInformation::validate` — that's the
-per-field-max-length source of truth mentioned in the table above.
+`BranchInsuranceRepository::create` takes a
+`&BranchInsuranceInformation` directly and calls its `Validate` impl
+before inserting — so a record that wouldn't pass ETIMS's own
+field-length rules is rejected before it reaches the database, rather
+than the two validations silently drifting apart over time.

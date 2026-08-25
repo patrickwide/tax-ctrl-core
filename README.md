@@ -23,11 +23,13 @@ implementation.
 ```
 src/
 └── persistence/
-    ├── connection.rs   # DbConfig + connect() — resolves SQLite vs PostgreSQL at runtime
+    ├── connection.rs    # DbConfig + connect() — resolves SQLite vs PostgreSQL at runtime
     ├── schema.rs        # Migrator — where migrations get registered
+    ├── migrations/      # Individual migration files, registered in schema.rs
     ├── entities/        # SeaORM entity definitions (generated or hand-written)
     ├── etims_types.rs   # etims-vscu-wrapper Rust type → SeaORM ColumnType mapping
-    └── repository.rs    # Generic CRUD repository built on top of entities
+    ├── repository.rs    # Generic CRUD repository built on top of entities
+    └── branch_insurance_repository.rs  # First concrete repository
 ```
 
 ## Requirements
