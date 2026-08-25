@@ -7,7 +7,13 @@
 //! See [`etims_types`] for the mapping from `etims-vscu-wrapper`'s Rust
 //! data types onto SeaORM-compatible SQL column types, used when writing
 //! migrations/entities for ETIMS-backed tables.
+//!
+//! [`branch_insurance_repository`] is the first concrete table built on
+//! that mapping: it persists `etims_vscu_wrapper::BranchInsuranceInformation`
+//! records via the `branch_insurance` table (migration under [`schema`],
+//! entity under [`entities::branch_insurance`]).
 
+pub mod branch_insurance_repository;
 pub mod connection;
 pub mod entities;
 pub mod etims_types;
