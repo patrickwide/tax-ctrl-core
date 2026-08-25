@@ -2,6 +2,10 @@
 name = "tax_ctrl_core"
 version = "0.1.0"
 edition = "2024"
+# `edition = "2024"` requires this as a hard minimum; see rust-toolchain.toml
+# for the toolchain contributors and CI actually build with.
+rust-version = "1.85"
+description = "Core Rust engine for tax_ctrl: runtime-swappable persistence (SQLite/PostgreSQL) via SeaORM, embedded in the app via Flutter Rust Bridge."
 
 [dependencies]
 dotenvy = "0.15.7"
