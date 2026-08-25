@@ -26,6 +26,7 @@ src/
     ├── connection.rs   # DbConfig + connect() — resolves SQLite vs PostgreSQL at runtime
     ├── schema.rs        # Migrator — where migrations get registered
     ├── entities/        # SeaORM entity definitions (generated or hand-written)
+    ├── etims_types.rs   # etims-vscu-wrapper Rust type → SeaORM ColumnType mapping
     └── repository.rs    # Generic CRUD repository built on top of entities
 ```
 
@@ -102,6 +103,10 @@ A pull request is expected to pass all four before merging.
   worked example (migration → entity → repository → tests) using a
   to-do list as a stand-in feature, for when a real feature needs the
   same treatment.
+- [`docs/etims-type-mapping.md`](docs/etims-type-mapping.md) — how the
+  `etims-vscu-wrapper` dependency's request/response Rust types map onto
+  SeaORM-compatible SQL column types, for when a feature needs to
+  persist ETIMS data.
 
 ## Contributing
 
