@@ -1,7 +1,6 @@
 //! Generated SeaORM entity definitions live in this module.
 //!
-//! No tables exist yet, so this module is currently empty. Once
-//! migrations are added to [`super::schema`], entities can either be
+//! Once a migration is added to [`super::schema`], entities can either be
 //! hand-written or generated with:
 //!
 //! ```text
@@ -29,4 +28,7 @@
 //! impl ActiveModelBehavior for ActiveModel {}
 //! ```
 //!
-//! Once entities exist, declare them here, e.g. `pub mod example;`.
+//! [`branch_insurance`] is the first hand-written entity following this
+//! shape.
+
+pub mod branch_insurance;
