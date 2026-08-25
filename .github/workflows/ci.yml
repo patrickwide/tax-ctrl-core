@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  fmt:
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --all -- --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+
+  test-sqlite:
+    name: Build & test (SQLite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --all-features --verbose
+      - run: cargo test --all-features --verbose
+
+  test-postgres:
+    name: Test (PostgreSQL)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: tax_ctrl
+          POSTGRES_PASSWORD: tax_ctrl
+          POSTGRES_DB: tax_ctrl
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U tax_ctrl"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    env:
+      TEST_DATABASE_URL: postgres://tax_ctrl:tax_ctrl@localhost:5432/tax_ctrl
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo test --all-features --verbose

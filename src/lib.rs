@@ -1,3 +1,5 @@
+pub mod persistence;
+
 pub fn hello_core() -> String {
     "Hello from tax_ctrl_core 🦀".to_string()
 }

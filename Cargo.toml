@@ -5,5 +5,21 @@ edition = "2024"
 
 [dependencies]
 dotenvy = "0.15.7"
-sea-orm = { version = "2.0.2", features = ["sqlx-sqlite", "runtime-tokio-rustls", "macros"] }
+# Both sqlx-sqlite and sqlx-postgres are enabled so the backend is chosen
+# at runtime from the DATABASE_URL scheme (sqlite:// vs postgres://),
+# rather than hardcoded at compile time. See src/persistence/connection.rs.
+sea-orm = { version = "2.0.2", features = [
+    "sqlx-sqlite",
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+    "macros",
+] }
+# Provides the Migrator/MigrationTrait scaffolding used in
+# src/persistence/schema.rs. The "cli" default feature is disabled since
+# this crate embeds migrations rather than shelling out to sea-orm-cli.
+sea-orm-migration = { version = "2.0.2", default-features = false, features = [
+    "sqlx-sqlite",
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+] }
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros"] }
