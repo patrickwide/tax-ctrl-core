@@ -184,7 +184,13 @@ mod tests {
 
     #[test]
     fn vec_of_primitive_maps_to_json() {
-        assert!(matches!(<Vec<String>>::sea_orm_column_type(), ColumnType::Json));
-        assert!(matches!(<Vec<i64>>::sea_orm_column_type(), ColumnType::Json));
+        assert!(matches!(
+            <Vec<String>>::sea_orm_column_type(),
+            ColumnType::Json
+        ));
+        assert!(matches!(
+            <Vec<i64>>::sea_orm_column_type(),
+            ColumnType::Json
+        ));
     }
 }

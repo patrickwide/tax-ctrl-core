@@ -8,6 +8,27 @@ in [`rust-toolchain.toml`](rust-toolchain.toml) and rustup will install
 them automatically the first time you run any `cargo` command here. This
 keeps your local checks aligned with what CI runs.
 
+## Private dependency: `etims-vscu-wrapper`
+
+This crate depends on [`etims-vscu-wrapper`](https://github.com/patrickwide/etims-vscu-wrapper),
+a private repository, as a git dependency in `Cargo.toml`. Two things
+follow from that:
+
+- **Locally**, `cargo build`/`cargo test`/etc. authenticate using your
+  own git credentials (an SSH key or a credential helper already able to
+  clone `patrickwide/etims-vscu-wrapper`) — nothing extra to configure if
+  you can already `git clone` that repo.
+- **In CI**, GitHub Actions' default `GITHUB_TOKEN` only has access to
+  *this* repo, not other private repos, so a repo secret named
+  `ETIMS_VSCU_WRAPPER_TOKEN` (a fine-grained PAT with read-only access to
+  `patrickwide/etims-vscu-wrapper`) must be set under this repo's
+  **Settings → Secrets and variables → Actions**. Each workflow job that
+  runs `cargo` rewrites `https://github.com/patrickwide/etims-vscu-wrapper`
+  to use that token via `git config --global url.insteadOf` (see
+  `.github/workflows/ci.yml`) before invoking Cargo. Without that secret
+  set, `clippy`/`build`/`test` jobs fail at dependency resolution with a
+  git authentication error.
+
 ## Day-to-day commands
 
 Run these before pushing — they're exactly what CI checks, so running
