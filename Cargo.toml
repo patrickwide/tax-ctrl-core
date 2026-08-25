@@ -27,3 +27,12 @@ sea-orm-migration = { version = "2.0.2", default-features = false, features = [
     "runtime-tokio-rustls",
 ] }
 tokio = { version = "1.53.1", features = ["rt-multi-thread", "macros"] }
+# Rust port of KRA's ETIMS VSCU/OSCU/GC-OSCU integration library. Not
+# published to crates.io, so it's pulled directly from its GitHub repo.
+# Pinned to `main` at a specific revision (rather than a floating branch)
+# so `cargo build` is reproducible; bump `rev` deliberately when picking
+# up upstream changes. This is a private repository — building against it
+# requires the consumer's own git credentials (SSH key or a credential
+# helper) to be configured; no token is stored here or anywhere in this
+# repo, per the "never hardcode secrets" rule.
+etims-vscu-wrapper = { git = "https://github.com/patrickwide/etims-vscu-wrapper.git", rev = "31cc9b0" }
